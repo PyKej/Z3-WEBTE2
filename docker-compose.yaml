@@ -5,7 +5,7 @@ services:
   nginx:
     image: nginx:1.18
     ports:
-      - 80:80
+      - "8080:80"
     volumes:
       - ./src:/var/www/php
       - ./.docker/nginx/conf.d:/etc/nginx/conf.d
@@ -18,38 +18,29 @@ services:
     working_dir: /var/www/php
     volumes:
       - ./src:/var/www/php
-    depends_on:
-      mysql:
-        condition: service_healthy
 
-  #MySQL service
-  mysql:
-    image: mysql/mysql-server:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: mojeHeslo.123
-      # MYSQL_1ROOT_HOST: "%"
-      MYSQL_USER: xpitkakester
-      MYSQL_PASSWORD: mojeHeslo.123
-      MYSQL_DATABASE: z3_webte2
-    volumes:
-      - ./.docker/mysql/my.cnf:/etc/mysql/mysql.cnf
-      - ./.database:/docker-entrypoint-initdb.d
-      - mysqldata:/var/lib/mysql
-    healthcheck:
-      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
-      interval: 5s
-      retries: 10
-  
-  # phpMyAdmin interface
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5
+
+
+
+services:
+  # Nginx webserver service
+  nginx:
+    image: nginx:1.18
     ports:
+      - 8443:443
       - 8080:80
-    environment:
-      PMA_HOST: mysql
+      - 8282:8282
+    volumes:
+      - ./src:/var/www/node8.webte.fei.stuba.sk
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./.docker/nginx/certs:/etc/nginx/certs
     depends_on:
-      mysql:
-        condition: service_healthy
-# Volumes
-volumes:
-  mysqldata:
+      - php
+
+  # PHP-FPM service
+  php:
+    build: ./src
+    working_dir: /var/www/node8.webte.fei.stuba.sk
+    volumes:
+      - ./src:/var/www/node8.webte.fei.stuba.sk
+    command: sh -c "php ./wsserver.php start -d && php-fpm"
