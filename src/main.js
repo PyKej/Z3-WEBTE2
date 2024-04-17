@@ -27,6 +27,10 @@ ws.onmessage = (e) => {
     if (data.type === "move" && data.uuid !== username) {
         drawOtherPlayer(data);
     }
+
+    else if (data.type === "point") {
+        drawOtherPlayer(data);
+    }
 };
 
 
@@ -46,6 +50,8 @@ function draw() { // Draw square on canvas
         ctx.fillStyle = p.color;
         ctx.fillRect(p.x, p.y, size, size);
     });
+
+    console.log(otherPlayers);
 }
 
 

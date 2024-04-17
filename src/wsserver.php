@@ -5,6 +5,7 @@ use Workerman\Connection\TcpConnection;
 require_once __DIR__ . '/vendor/autoload.php';
 
 $players = []; // Store player states
+$points = []; // Store points states
 
 $ws_worker = new Worker("websocket://0.0.0.0:8282");
 $ws_worker->count = 1;
@@ -28,16 +29,54 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($ws_work
             'color' => $decoded['color'],
             'positions' => [
                 ['posX' => $decoded['x'], 'posY' => $decoded['y']]
-            ]
+            ],
+            'points' => []  // Initialize points as an empty array
         ];
 
+
+
+        send5Points($decoded, $ws_worker);
+
         // send data of other players to the new player
-        sendDataOfOtherPositions($players, $decoded, $connection);
+        sendDataOfOtherPoints($players, $decoded, $connection); // Send points
+
+        sendDataOfOtherPositions($players, $decoded, $connection);  // Send positions
+        
 
         // Modify type to 'move' for broadcasting
         $decoded['type'] = 'move';
         $broadcastData = json_encode($decoded);
         broadcast($ws_worker, $connection, $broadcastData);
+
+        // TODO here write code to send 5 random positions of random points same color as the player on the canvas
+        
+
+
+
+
+        
+
+        // send data of other players points to the new player 
+        //  simmilar as sendDataOfOtherPositions
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
     else if ($decoded && $decoded['type'] === 'move') { // If 'type' == 'move'
         addPosition($players, $decoded['uuid'], $decoded['x'], $decoded['y']); // Add the new position to the players array
@@ -50,12 +89,57 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($ws_work
     }
 
     // TODO testind
-    // echo '<pre>';
-    // print_r($players);
-    // echo '<pre>';
+    echo '<pre>';
+    print_r($players);
+    echo '<pre>';
 
 
 };
+
+function send5Points($decoded, $ws_worker) {
+    $decodedColor = $decoded['color'];
+    if ($decodedColor[0] === '#') {
+        $decodedColor = substr($decodedColor, 1);
+    }
+
+    $r = hexdec(substr($decodedColor, 0, 2));
+    $g = hexdec(substr($decodedColor, 2, 2));
+    $b = hexdec(substr($decodedColor, 4, 2));
+
+    $darkerColor = [
+        'r' => max($r - 80, 0),
+        'g' => max($g - 80, 0),
+        'b' => max($b - 80, 0)
+    ];
+
+    $darkerColorHex = sprintf("#%02x%02x%02x", $darkerColor['r'], $darkerColor['g'], $darkerColor['b']);
+
+    global $players; // Ensure $players is accessible if not already declared with `use`
+    for ($i = 0; $i < 5; $i++) {
+        $randX = rand(0, 700);
+        $randY = rand(0, 500);
+        $pointData = [
+            "type" => "point",
+            "uuid" => $decoded['uuid'],
+            "x" => $randX,
+            "y" => $randY,
+            "color" => $darkerColorHex
+        ];
+
+        if (isset($players[$decoded['uuid']])) {
+            $players[$decoded['uuid']]['points'][] = ['posX' => $randX, 'posY' => $randY, 'color' => $darkerColorHex];
+            echo "Point added: " . print_r($players[$decoded['uuid']]['points'], true);
+        } else {
+            echo "Error: UUID not found in players array.\n";
+        }
+
+        // Broadcast these points to all clients
+        broadcast($ws_worker, null, json_encode($pointData));
+    }
+}
+
+
+
 // Function to add a new position
 function addPosition(&$players, $uuid, $posX, $posY) {
     if (isset($players[$uuid])) {
@@ -90,7 +174,7 @@ function removePosition(&$players, $uuid, $positionIndex) {
 
 function broadcast($ws_worker, $connection, $data){
     foreach ($ws_worker->connections as $conn) {
-        if ($conn !== $connection) {
+        if ($connection === null || $conn !== $connection) {
             $conn->send($data); // Send the data to all other connections
             // sendDataOfOtherPositions($players, $decoded, $conn); 
         }
@@ -110,11 +194,23 @@ function sendDataOfOtherPositions($players, $decoded, $connection) {
             }
         }
     }
+}
 
-
-
-
-
+function sendDataOfOtherPoints($players, $decoded, $connection) {
+    foreach ($players as $playerUUID => $playerData) {
+        if ($playerUUID !== $decoded['uuid']) { // Ensure not sending data to self
+            foreach ($playerData['points'] as $point) {
+                $pointData = [
+                    "type" => "point",
+                    "uuid" => $playerUUID,
+                    "x" => $point['posX'],
+                    "y" => $point['posY'],
+                    "color" => $point['color']
+                ];
+                $connection->send(json_encode($pointData));
+            }
+        }
+    }
 }
 
 // Add a new position to player1

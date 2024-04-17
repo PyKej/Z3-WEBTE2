@@ -16,3 +16,41 @@ Stack trace:
 #4 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(560): Workerman\Worker::forkWorkers()
 #5 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php(155): Workerman\Worker::runAll()
 #6 {main}
+2024-04-17 19:57:02 pid:1 TypeError: Cannot access offset of type string on string in C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php:49
+Stack trace:
+#0 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Connection\TcpConnection.php(646): {closure}()
+#1 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Events\Select.php(311): Workerman\Connection\TcpConnection->baseRead()
+#2 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1488): Workerman\Events\Select->loop()
+#3 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1405): Workerman\Worker::forkWorkersForWindows()
+#4 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(560): Workerman\Worker::forkWorkers()
+#5 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php(170): Workerman\Worker::runAll()
+#6 {main}
+2024-04-17 19:57:44 pid:1 TypeError: Cannot access offset of type string on string in C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php:51
+Stack trace:
+#0 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Connection\TcpConnection.php(646): {closure}()
+#1 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Events\Select.php(311): Workerman\Connection\TcpConnection->baseRead()
+#2 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1488): Workerman\Events\Select->loop()
+#3 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1405): Workerman\Worker::forkWorkersForWindows()
+#4 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(560): Workerman\Worker::forkWorkers()
+#5 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php(172): Workerman\Worker::runAll()
+#6 {main}
+2024-04-17 20:15:15 pid:1 Error: Cannot use object of type Workerman\Connection\TcpConnection as array in C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php:91
+Stack trace:
+#0 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php(48): send5Points()
+#1 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Connection\TcpConnection.php(646): {closure}()
+#2 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Events\Select.php(311): Workerman\Connection\TcpConnection->baseRead()
+#3 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1488): Workerman\Events\Select->loop()
+#4 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1405): Workerman\Worker::forkWorkersForWindows()
+#5 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(560): Workerman\Worker::forkWorkers()
+#6 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php(193): Workerman\Worker::runAll()
+#7 {main}
+2024-04-17 20:55:17 pid:1 TypeError: Cannot access offset of type string on string in C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php:205
+Stack trace:
+#0 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php(41): sendDataOfOtherPoints()
+#1 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Connection\TcpConnection.php(646): {closure}()
+#2 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Events\Select.php(311): Workerman\Connection\TcpConnection->baseRead()
+#3 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1488): Workerman\Events\Select->loop()
+#4 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1405): Workerman\Worker::forkWorkersForWindows()
+#5 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(560): Workerman\Worker::forkWorkers()
+#6 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php(224): Workerman\Worker::runAll()
+#7 {main}
