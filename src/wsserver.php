@@ -14,12 +14,25 @@ $ws_worker->onConnect = function($connection) {
 };
 
 // When receiving data from the client, return "hello $data" to the client
-$ws_worker->onMessage = function(TcpConnection $connection, $data) use ($ws_worker)
-{
+$ws_worker->onMessage = function(TcpConnection $connection, $data) use ($ws_worker) {
+    $decoded = json_decode($data, true);
+    if ($decoded && $decoded['type'] === 'move') {
+        // You can add logic here to handle the movement, like collision detection
+    }
     foreach ($ws_worker->connections as $conn) {
-        $conn->send($data);
+        $conn->send($data);  // Echo the move data to all clients
     }
 };
+
+// $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($ws_worker) {
+//     foreach ($ws_worker->connections as $conn) {
+//         if ($conn !== $connection) {  // Send the data to all clients except the sender
+//             $conn->send($data);
+//         }
+//     }
+// };
+
+
 
 // Run the worker
 Worker::runAll();

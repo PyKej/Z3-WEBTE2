@@ -23,29 +23,32 @@
 
     <main> 
         <p>Tvoj alias je <span class="pico-color-cyan-500" id="alias"></span></p>
-        <div id="msg-block">
+        <!-- <div id="msg-block">
         </div>
         <div>
             <textarea id="msg-text" name="bio" placeholder="Tu mozete pisat spravu..."></textarea>
             <button id="send" onclick="sendMessage()">Odosli spravu!</button>
-        </div>
+        </div> -->
     </main>    
 
     <main> 
         <canvas id="gameCanvas" width="800" height="600"></canvas>
     </main>    
 
+
+
+
+
+
     <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-
-    // Set initial position to a random location within the canvas bounds
-    let x = Math.floor(Math.random() * (canvas.width - 20));  // Ensure the square spawns fully within the canvas
+    let x = Math.floor(Math.random() * (canvas.width - 20));
     let y = Math.floor(Math.random() * (canvas.height - 20));
+    const size = 20;
+    let squareColor = getRandomColor();
+    let movements = [];  // Array to store all movements
 
-    const size = 20;  // Size of the square
-
-    // Generate a random color
     function getRandomColor() {
         const letters = '0123456789ABCDEF';
         let color = '#';
@@ -55,33 +58,38 @@
         return color;
     }
 
-    // Set initial color
-    let squareColor = getRandomColor();
-
     function drawSquare() {
         ctx.fillStyle = squareColor;
-        ctx.fillRect(x, y, size, size);  // Draw the square
+        ctx.fillRect(x, y, size, size);
     }
 
-    document.addEventListener('keydown', function(event) {
-        switch (event.key) {
-            case 'w':  // Move up
-                if (y - 10 >= 0) y -= 10;  // Check boundary before moving
-                break;
-            case 's':  // Move down
-                if (y + 10 + size <= canvas.height) y += 10;  // Check boundary before moving
-                break;
-            case 'a':  // Move left
-                if (x - 10 >= 0) x -= 10;  // Check boundary before moving
-                break;
-            case 'd':  // Move right
-                if (x + 10 + size <= canvas.width) x += 10;  // Check boundary before moving
-                break;
+    function updatePosition(newX, newY) {
+        x = newX;
+        y = newY;
+        drawSquare();
+        movements.push({ x: x, y: y });  // Store position in the movements array
+
+        // Include the player's unique identifier with the movement data
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: "move", x: x, y: y, uuid: username }));
         }
-        drawSquare();  // Redraw the square at the new position
+    }
+
+
+    document.addEventListener('keydown', function(event) {
+        let newX = x, newY = y;
+        switch (event.key) {
+            case 'w': newY -= 10; break;
+            case 's': newY += 10; break;
+            case 'a': newX -= 10; break;
+            case 'd': newX += 10; break;
+        }
+        if (newX >= 0 && newX + size <= canvas.width && newY >= 0 && newY + size <= canvas.height) {
+            updatePosition(newX, newY);
+        }
     });
 
-    drawSquare();  // Initial draw
+    drawSquare();
 </script>
 
 
