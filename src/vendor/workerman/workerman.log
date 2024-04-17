@@ -1,0 +1,18 @@
+2024-04-17 16:20:10 pid:1 Error: Object of class Workerman\Connection\TcpConnection could not be converted to string in C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php:30
+Stack trace:
+#0 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Connection\TcpConnection.php(646): {closure}()
+#1 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Events\Select.php(311): Workerman\Connection\TcpConnection->baseRead()
+#2 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1488): Workerman\Events\Select->loop()
+#3 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1405): Workerman\Worker::forkWorkersForWindows()
+#4 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(560): Workerman\Worker::forkWorkers()
+#5 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php(48): Workerman\Worker::runAll()
+#6 {main}
+2024-04-17 18:27:46 pid:1 TypeError: Cannot access offset of type string on string in C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php:45
+Stack trace:
+#0 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Connection\TcpConnection.php(646): {closure}()
+#1 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Events\Select.php(311): Workerman\Connection\TcpConnection->baseRead()
+#2 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1488): Workerman\Events\Select->loop()
+#3 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(1405): Workerman\Worker::forkWorkersForWindows()
+#4 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\vendor\workerman\workerman\Worker.php(560): Workerman\Worker::forkWorkers()
+#5 C:\Users\PyKej\Documents\SCHOOL - 6\WEBTE2\Z3-WEBTE2\src\wsserver.php(155): Workerman\Worker::runAll()
+#6 {main}
