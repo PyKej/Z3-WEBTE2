@@ -12,4 +12,14 @@
 
   <!-- Your custom CSS -->
   <link rel="stylesheet" href="/css/style.css">
+
+
+  <style>
+        /* Basic styling for the canvas */
+        #gameCanvas {
+            border: 1px solid black;
+            background-color: #f0f0f0;
+        }
+    </style>
+
 </head>
