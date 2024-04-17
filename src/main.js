@@ -6,7 +6,7 @@ let username;
 let otherPlayers = {};
 
 let x, y;
-const size = 20;
+const size = 10;
 const squareColor = getRandomColor(); // Initialize local player color
 
 const ws = new WebSocket("ws://localhost:8282/");
@@ -27,12 +27,24 @@ ws.onmessage = (e) => {
     if (data.type === "move" && data.uuid !== username) {
         drawOtherPlayer(data);
     }
-
     else if (data.type === "point") {
         drawOtherPlayer(data);
     }
+    else if (data.type === "win") {
+        if (data.winner === username) {
+            window.location.href = 'win.php'; // Redirect winner to the win.php page
+        } else {
+            window.location.href = 'lose.php'; // Redirect loser to the lose.php page
+        }
+    }
 };
 
+
+function displayEndGameMessage(winnerUuid, playerUuid) {
+    const main = document.querySelector('main');
+    const message = winnerUuid === playerUuid ? "You win!" : `You lose! ${winnerUuid} wins because they killed you.`;
+    main.innerHTML = `<h2>${message}</h2>`; // Display message and clear the canvas
+}
 
 function getRandomColor() { // Generate random color for the square
     const letters = '0123456789ABCDEF';
@@ -56,9 +68,10 @@ function draw() { // Draw square on canvas
 
 
 function setupInitialPosition() {
-    x = Math.floor(Math.random() * (canvas.width - size));
-    y = Math.floor(Math.random() * (canvas.height - size));
-
+    // Ensure x and y are multiples of 10
+    x = Math.floor((Math.random() * ((canvas.width - size) / 10))) * 10;
+    y = Math.floor((Math.random() * ((canvas.height - size) / 10))) * 10;
+    console.log("positions: ", x," ", y);
     updatePosition('initP', x, y);
 }
 

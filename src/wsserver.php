@@ -5,7 +5,7 @@ use Workerman\Connection\TcpConnection;
 require_once __DIR__ . '/vendor/autoload.php';
 
 $players = []; // Store player states
-$points = []; // Store points states
+
 
 $ws_worker = new Worker("websocket://0.0.0.0:8282");
 $ws_worker->count = 1;
@@ -79,7 +79,8 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($ws_work
 
     }
     else if ($decoded && $decoded['type'] === 'move') { // If 'type' == 'move'
-        addPosition($players, $decoded['uuid'], $decoded['x'], $decoded['y']); // Add the new position to the players array
+        // addPosition($players, $decoded['uuid'], $decoded['x'], $decoded['y']); // Add the new position to the players array
+        addPosition($players, $decoded['uuid'], $decoded['x'], $decoded['y'], $connection, $ws_worker); // Add the new position to the players array
         broadcast($ws_worker, $connection, $data); // // Broadcast the new player state to all other players
 
         // TODO testing
@@ -141,13 +142,49 @@ function send5Points($decoded, $ws_worker) {
 
 
 // Function to add a new position
-function addPosition(&$players, $uuid, $posX, $posY) {
+// function addPosition(&$players, $uuid, $posX, $posY) {
+//     if (isset($players[$uuid])) {
+//         $players[$uuid]['positions'][] = ['posX' => $posX, 'posY' => $posY];
+//     } else {
+//         echo "Player not found.";
+//     }
+// }
+
+
+
+function addPosition(&$players, $uuid, $posX, $posY, $connection, $ws_worker) {
     if (isset($players[$uuid])) {
         $players[$uuid]['positions'][] = ['posX' => $posX, 'posY' => $posY];
+        // Check for collisions after adding the new position
+        $collisionUuid = checkCollision($players, $uuid, $posX, $posY);
+        if ($collisionUuid !== false) {
+            // Collision detected, handle win logic here
+            $winMessage = json_encode([
+                'type' => 'win',
+                'winner' => $uuid,
+                'loser' => $collisionUuid
+            ]);
+            broadcast($ws_worker, null, $winMessage); // Broadcast win message to all clients
+
+            // Reset the game state
+            $players = [];
+
+        }
     } else {
         echo "Player not found.";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 // TODO only to show
 function readAllPositions($players) {
@@ -213,9 +250,23 @@ function sendDataOfOtherPoints($players, $decoded, $connection) {
     }
 }
 
+
+function checkCollision($players, $currentUuid, $posX, $posY) {
+    foreach ($players as $uuid => $playerData) { // Iterate through all players
+        if ($uuid !== $currentUuid) { // Don't check against self
+            foreach ($playerData['positions'] as $position) { // Iterate through all positions of the player
+                if ($position['posX'] === $posX && $position['posY'] === $posY) { // Check for collision
+                    return $uuid; // Return the UUID of the player with whom the collision occurred
+                }
+            }
+        }
+    }
+    return false;
+}
+
 // Add a new position to player1
 
-// // Handle Disconnections
+// Handle Disconnections
 // $ws_worker->onClose = function($connection) use (&$players) {
 //     if (isset($connection->uuid)) {
 //         unset($players[$connection->uuid]);
