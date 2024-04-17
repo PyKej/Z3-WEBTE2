@@ -31,10 +31,10 @@ ws.onmessage = (e) => {
         drawOtherPlayer(data);
     }
     else if (data.type === "win") {
-        if (data.winner === username) {
-            window.location.href = 'win.php'; // Redirect winner to the win.php page
+        if (username === data.winner) {
+            window.location.href = `win.php?loser=${data.loser}`;
         } else {
-            window.location.href = 'lose.php'; // Redirect loser to the lose.php page
+            window.location.href = `lose.php?winner=${data.winner}`;
         }
     }
 };

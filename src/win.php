@@ -10,7 +10,7 @@
     <div class="container mt-5">
         <div class="alert alert-success" role="alert">
             <h1 class="alert-heading">Congratulations! 🎉</h1>
-            <p>You won the game! Well played!</p>
+            <p>You won the game! You defeated <?php echo htmlspecialchars($_GET['loser']); ?>. Well played!</p>
             <hr>
             <p class="mb-0"><a href="index.php" class="btn btn-primary">Play Again</a></p>
         </div>

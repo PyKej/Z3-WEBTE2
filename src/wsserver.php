@@ -90,9 +90,9 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($ws_work
     }
 
     // TODO testind
-    echo '<pre>';
-    print_r($players);
-    echo '<pre>';
+    // echo '<pre>';
+    // print_r($players);
+    // echo '<pre>';
 
 
 };
