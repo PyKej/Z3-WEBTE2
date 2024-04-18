@@ -31,6 +31,8 @@
     <div id="gameInfo" class="container">
         <h1 class="h3">Real-Time Multiplayer Game</h1>
         <p class="lead">Your alias is: <span class="fw-bold text-primary" id="alias">@placeholder</span></p>
+        <input type="hidden" id="gameTimer" value="<?php echo isset($_POST['timer']) ? htmlspecialchars($_POST['timer']) : 60; ?>">
+
     </div>
 
     <canvas id="gameCanvas" width="800" height="600"></canvas>

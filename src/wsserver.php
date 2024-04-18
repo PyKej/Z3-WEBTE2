@@ -88,6 +88,48 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($ws_work
         // print_r($data);
         // echo '<broadcast>';
     }
+    else if ($decoded['type'] === 'endTime') {
+        echo "Game has ended for player UUID: {$decoded['uuid']}\n";
+        // Handle end-of-game logic here, e.g., determining if the game is a draw
+
+
+        $maxPositions = 0;
+        $playerWithMostPositions = null;
+
+        foreach ($players as $playerUUID => $playerData) {
+            $numPositions = count($playerData['positions']);
+            if ($numPositions > $maxPositions) {
+                $maxPositions = $numPositions;
+                $playerWithMostPositions = $playerUUID;
+            }
+        }
+
+        echo "Player with the most positions: " . $playerWithMostPositions . "\n";
+        echo "Number of positions: " . $maxPositions . "\n";
+
+        // Broadcast the winner to all clients
+        $winMessage = json_encode([
+            'type' => 'winTime',
+            'winner' => $playerWithMostPositions,
+            'loser' => null
+        ]);
+        broadcast($ws_worker, null, $winMessage); // Broadcast win message to all clients
+
+        // Reset the game state
+        $players = [];
+
+        
+        // $winMessage = json_encode([
+        //     'type' => 'win',
+        //     'winner' => $uuid,
+        //     'loser' => $collisionUuid
+        // ]);
+        // broadcast($ws_worker, null, $winMessage); // Broadcast win message to all clients
+
+        // Reset the game state
+        // $players = [];
+
+    }
 
     // TODO testind
     // echo '<pre>';

@@ -10,7 +10,7 @@
     <div class="container mt-5">
         <div class="alert alert-danger" role="alert">
             <h1 class="alert-heading">Game Over! 😢</h1>
-            <p>Sorry, you lost the game. You were defeated by <?php echo htmlspecialchars($_GET['winner']); ?>. Better luck next time!</p>
+            <p>Sorry, you lost the game, becouse you were eliminated. Better luck next time!</p>
             <hr>
             <p class="mb-0"><a href="index.php" class="btn btn-primary">Try Again</a></p>
         </div>

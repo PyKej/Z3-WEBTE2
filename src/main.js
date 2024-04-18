@@ -1,6 +1,12 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// const gameTimerElement = document.getElementById('gameTimer');
+let gameDuration = 60; // Default duration in seconds
+
+
+
+
 
 let username;
 let otherPlayers = {};
@@ -11,8 +17,30 @@ const squareColor = getRandomColor(); // Initialize local player color
 
 const ws = new WebSocket("ws://localhost:8282/");
 
-ws.onopen = () => console.log("Connected to the WebSocket server");
 
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const gameTimerElement = document.getElementById('gameTimer');
+    gameDuration = parseInt(gameTimerElement.value, 10) || 60; // Set default to 60 seconds if parsing fails
+    console.log("Game Duration:", gameDuration);
+
+    ws.onopen = () => {
+        console.log("Connected to the WebSocket server");
+        // Start the game timer after the connection is established
+        setTimeout(() => {
+            // Time has expired
+            console.log("Game duration has ended.");
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: "endTime", uuid: username }));
+            }
+        }, gameDuration * 1000); // Convert seconds to milliseconds
+    };
+});
+
+
+
+console.log ("gameDuration:" . gameDuration);
 
 // when message is received from the WebSocket server
 ws.onmessage = (e) => {
@@ -30,21 +58,25 @@ ws.onmessage = (e) => {
     else if (data.type === "point") {
         drawOtherPlayer(data);
     }
+
+    // TODO - Handle the win and lose cases
     else if (data.type === "win") {
         if (username === data.winner) {
-            window.location.href = `win.php?loser=${data.loser}`;
+            window.location.href = `win.php`;
         } else {
-            window.location.href = `lose.php?winner=${data.winner}`;
+            window.location.href = `lose.php`;
+        }
+    }
+    else if (data.type === "winTime") {
+        if (username === data.winner) {
+            window.location.href = `winTime.php`;
+        } else {
+            window.location.href = `loseTime.php`;
         }
     }
 };
 
 
-function displayEndGameMessage(winnerUuid, playerUuid) {
-    const main = document.querySelector('main');
-    const message = winnerUuid === playerUuid ? "You win!" : `You lose! ${winnerUuid} wins because they killed you.`;
-    main.innerHTML = `<h2>${message}</h2>`; // Display message and clear the canvas
-}
 
 function getRandomColor() { // Generate random color for the square
     const letters = '0123456789ABCDEF';
